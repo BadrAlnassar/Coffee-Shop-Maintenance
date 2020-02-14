@@ -4,7 +4,7 @@
     "port": 3306,
     "username": "root",
     "password": "ldld2009",
-    "database": "nadil_development",
+    "database": "coffee-shop-maintenance",
     "entities": ["entities/*.ts"],
     "logging": true,
     "synchronize": true
