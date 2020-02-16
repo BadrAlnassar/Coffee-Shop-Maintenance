@@ -1,4 +1,6 @@
 import { getManager } from "typeorm";
+import { EngineerRating } from "../entities/EngineerRating";
+import { Engineer } from "../entities/Engineer";
 const { Shop } = require("../entities/Shop")
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
@@ -108,5 +110,46 @@ module.exports = {
                 message: e
             });
         }
-    } // sign out just delete the token from the front-end. 
+    },
+    rateEngineer: async(req , res) => {
+        let body = req.body;
+        let rating = new EngineerRating();
+        rating.rating = body.rating;
+        let shop = new Shop(undefined, undefined, undefined, undefined, undefined, undefined);
+        shop.id = body.shopId;
+        rating.shop = shop;
+        let engineer = new Engineer(undefined, undefined, undefined, undefined);
+        engineer.id = body.engineerId;
+        rating.engineer = engineer;
+            try {
+                rating = await EngineerRating.save(rating);
+                engineer = await Engineer.createQueryBuilder("engineer")
+                    .leftJoinAndSelect("engineer.ratings", "rating")
+                    .where({
+                        id: body.engineerId
+                    }).getOne();
+                let sum = 0;
+                
+                engineer.ratings.forEach(el => {
+                    sum += el.rating;
+                })
+                
+                if (engineer.ratings.length != 0) {                    
+                    engineer.rating = sum / engineer.ratings.length;
+                    delete engineer.ratings;
+                    let manager = getManager().getRepository(Engineer);              
+                    await manager.update(body.engineerId, engineer);
+                }
+                return res.json({
+                    success: 1,
+                    data: rating
+                });
+            } catch (e) {
+                return res.status(500).json({
+                    success: 0,
+                    message: e
+                });
+            }
+    }
+    // sign out just delete the token from the front-end. 
 }

@@ -68,8 +68,14 @@ export class Engineer extends BaseEntity {
         this.hash = hashSync(this.hash, genSaltSync(10));
       }
 
-      static createEngineer(engineer: Engineer) {
+    static createEngineer(engineer: Engineer) {
         return this.save(engineer);
+    }
+
+    static async getEngineer(id: number) {
+        return this.findOne({
+            where: { id }
+        })
     }
 
 }
