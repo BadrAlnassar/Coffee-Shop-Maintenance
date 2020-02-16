@@ -3,14 +3,14 @@ const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 module.exports = {
-    createShop: async(req, res) => {
+    createEngineer: async(req, res) => {
         let body = req.body;
-        let shop = new Engineer(body.name, body.phoneNumber, body.email, body.hash);
+        let engineer = new Engineer(body.name, body.phoneNumber, body.email, body.hash);
         try {
-            shop = await Engineer.createShop(Engineer);
+            engineer = await Engineer.createEngineer(engineer);
             return res.json({
                 success: 1,
-                data: shop
+                data: engineer
             });
         } catch (e) {
             return res.status(500).json({
@@ -34,14 +34,14 @@ module.exports = {
         }
     },
     retrieveEngineerById: async(req, res) => {
-        let engineer = req.body;
+        let body = req.body;
         try {
             let engineer = await Engineer.findOne({
                 where: { id: body.id }
             });
             return res.json({
                 success: 1,
-                data: shop
+                data: engineer
             });
         } catch (e) {
             return res.status(500).json({
@@ -58,7 +58,7 @@ module.exports = {
             });
             return res.json({
                 success: 1,
-                data: shop
+                data: engineer
             });
         } catch (e) {
             return res.status(500).json({
@@ -72,7 +72,7 @@ module.exports = {
         let engineer = await Engineer.findOne({
             where: { email: body.email }
         });
-            const result = compareSync(body.hash, shop.hash);
+            const result = compareSync(body.hash, engineer.hash);
             if (result){
               const jsonToken = sign({ result: engineer }, "qwe123", {
                   expiresIn: "2h"

@@ -15,9 +15,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const router = require('./routes/shopRoutes');
+const shopRouter = require('./routes/shopRoutes');
+const engineerRouter = require('./routes/engineerRoutes.js');
 
-app.use("/api", router);
+app.use("/shop", shopRouter);
+app.use("/engineer", engineerRouter);
 
 app.listen(3000, () => {
   console.log("run")

@@ -37,7 +37,9 @@ export class Engineer extends BaseEntity {
     })
     rating: number;
 
-    @Column()
+    @Column({
+        unique: true
+    })
     email: string;
 
     @Column()
