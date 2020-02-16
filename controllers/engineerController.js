@@ -1,14 +1,13 @@
-const { Shop } = require("../entities/Engineer")
+const { Engineer } = require("../entities/Engineer")
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 module.exports = {
     createShop: async(req, res) => {
         let body = req.body;
-        let shop = new Shop(body.name, body.location, body.ownerName,
-                            body.ownerPhoneNumber, body.email, body.hash);
+        let shop = new Engineer(body.name, body.phoneNumber, body.email, body.hash);
         try {
-            shop = await Shop.createShop(shop);
+            shop = await Engineer.createShop(Engineer);
             return res.json({
                 success: 1,
                 data: shop
@@ -20,12 +19,12 @@ module.exports = {
             });
         }
     },
-    retrieveShops: async(req, res) => {
+    retrieveEngineer: async(req, res) => {
         try {
-            let shop = await Shop.find();
+            let engineer = await Engineer.find();
             return res.json({
                 success: 1,
-                data: shop
+                data: engineer
             });
         } catch (e) {
             return res.status(500).json({
@@ -34,10 +33,10 @@ module.exports = {
             });
         }
     },
-    retrieveShopsById: async(req, res) => {
-        let body = req.body;
+    retrieveEngineerById: async(req, res) => {
+        let engineer = req.body;
         try {
-            let shop = await Shop.findOne({
+            let engineer = await Engineer.findOne({
                 where: { id: body.id }
             });
             return res.json({
@@ -51,10 +50,10 @@ module.exports = {
             });
         }
     },
-    retrieveShopsByEmail: async(req, res) => {
+    retrieveEngineerByEmail: async(req, res) => {
         let body = req.body;
         try {
-            let shop = await Shop.findOne({
+            let engineer = await Engineer.findOne({
                 where: { email: body.email }
             });
             return res.json({
@@ -70,12 +69,12 @@ module.exports = {
     },
     login: async (req, res) => {
         let body = req.body;
-        let shop = await Shop.findOne({
+        let engineer = await Engineer.findOne({
             where: { email: body.email }
         });
             const result = compareSync(body.hash, shop.hash);
             if (result){
-              const jsonToken = sign({ result: shop }, "qwe123", {
+              const jsonToken = sign({ result: engineer }, "qwe123", {
                   expiresIn: "2h"
               });
               return res.json({
