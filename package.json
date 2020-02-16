@@ -8,6 +8,7 @@
     "development": "ts-node-dev -r dotenv/config app.ts"
   },
   "dependencies": {
+    "bcrypt": "^3.0.8",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.5"
   }
