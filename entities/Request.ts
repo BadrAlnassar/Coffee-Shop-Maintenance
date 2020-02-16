@@ -15,6 +15,12 @@ export enum RequestStatus {
     DONE = "done"
 }
 
+export enum ProblemType {
+    X1 = "x1",
+    X2 = "x2",
+    X3 = "x3"
+}
+
 @Entity()
 export class Request extends BaseEntity {
 
@@ -24,7 +30,9 @@ export class Request extends BaseEntity {
     @CreateDateColumn()
     createdAt: string;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({
+        onUpdate: "CURRENT_TIMESTAMP(6)"
+    })
     updatedAt: string;
 
     @Column({
@@ -34,8 +42,12 @@ export class Request extends BaseEntity {
     })
     status: RequestStatus;
 
-    @Column()
-    problemType: string;
+    @Column({
+        type: "enum",
+        enum: ProblemType
+    })
+    problemType: ProblemType;
+
 
     @Column()
     comment: string;
@@ -48,4 +60,22 @@ export class Request extends BaseEntity {
         { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     engineer: Engineer;
 
+    constructor(problemType, comment, shopId, engineerId) {
+        super();
+        this.problemType = problemType;
+        this.comment = comment;
+        let shop = new Shop(undefined, undefined, undefined, undefined, undefined, undefined);
+        shop.id = shopId;
+        this.shop = shop;
+        let engineer = new Engineer(undefined, undefined, undefined, undefined);
+        engineer.id = engineerId;
+        this.engineer = engineer;
+    }
+
+    static async getRequest(id: number) {
+        return this.findOne({
+            where: { id }
+        });
+    }
+    
 }

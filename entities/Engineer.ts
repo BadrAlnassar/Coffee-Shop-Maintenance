@@ -6,7 +6,7 @@ import {
     OneToMany,
     BeforeInsert,
     CreateDateColumn,
-    UpdateDateColumn } from "typeorm";
+    UpdateDateColumn } from "typeorm";    
 import { 
     hashSync,
     compareSync,
@@ -23,7 +23,9 @@ export class Engineer extends BaseEntity {
     @CreateDateColumn()
     createdAt: string;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({
+        onUpdate: "CURRENT_TIMESTAMP(6)"
+    })
     updatedAt: string;
 
     @Column()

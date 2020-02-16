@@ -1,3 +1,4 @@
+import { getManager } from "typeorm";
 const { Shop } = require("../entities/Shop")
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
@@ -90,5 +91,22 @@ module.exports = {
                 });
             }
         
+    },
+    changeLocation: async(req, res) => {
+        try {
+            let shop = await Shop.getShop(req.body.id);
+            shop.location = req.body.location;
+            let manager = getManager().getRepository(Shop);                
+            await manager.update(req.body.id, shop);
+            return res.json({
+                success: 1,
+                data: shop
+            });;
+        } catch (e) {
+            return res.status(500).json({
+                success: 0,
+                message: e
+            });
+        }
     } // sign out just delete the token from the front-end. 
 }

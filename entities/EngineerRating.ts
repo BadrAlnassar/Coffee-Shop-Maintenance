@@ -18,7 +18,9 @@ export class EngineerRating extends BaseEntity {
     @CreateDateColumn()
     createdAt: string;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({
+        onUpdate: "CURRENT_TIMESTAMP(6)"
+    })
     updatedAt: string;
 
     @Column()

@@ -23,7 +23,9 @@ export class Shop extends BaseEntity {
     @CreateDateColumn()
     createdAt: string;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({
+        onUpdate: "CURRENT_TIMESTAMP(6)"
+    })
     updatedAt: string;
 
     @Column()
@@ -71,6 +73,12 @@ export class Shop extends BaseEntity {
 
     static createShop(shop: Shop) {
         return this.save(shop);
+    }
+
+    static async getShop(id: number) {
+        return this.findOne({
+            where: { id }
+        });
     }
 
 }
